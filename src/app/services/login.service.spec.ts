@@ -1,16 +1,32 @@
-import { TestBed } from '@angular/core/testing';
+import { Inject, Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 
-import { LoginService } from './login.service';
+@Injectable({
+  providedIn: 'root'
+})
+export class LoginService {
 
-describe('LoginService', () => {
-  let service: LoginService;
+    mostraMenu = new Subject<boolean>();
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(LoginService);
-  });
+    constructor(){  }
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+    login(usuario:string, senha:string):void{
+      if(usuario=="aluno" && senha =="1234"){
+        localStorage.setItem('token','qwer1234');
+        this.mostraMenu.next(false);
+      }else{
+        this.mostraMenu.next(true);
+        window.location.reload();
+      }
+      
+    }
+
+setMostraMenu(valor: boolean){
+  this.mostraMenu.next(valor);
+}
+
+getMostraMenu(){
+  return this.mostraMenu.asObservable();
+}
+}
+
